@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Planning from './Planning';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Planning />
   </React.StrictMode>,
   document.getElementById('root')
 );
