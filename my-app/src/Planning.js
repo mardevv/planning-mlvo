@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from "moment";
+import Axios from "axios";
 import 'moment/locale/fr'
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import './style.css';
-import listEventsMatin from './events/listEventsMatin';
-import listEventsAprem from './events/listEventsAprem';
+
 
 function Planning() {
 
@@ -15,6 +15,11 @@ function Planning() {
   const [showEvenExt, setShowEvenExt] = useState(false);
   const [showEvenExtBut, setShowEvenExtBut] = useState("Afficher Evenements EXT");
 
+  const [eventList, setEventList] = useState([]);
+
+
+
+  
 
   let weekDays = [
     moment().isoWeekday((1+cWeek)).format("ddd DD MMM"),
@@ -24,8 +29,15 @@ function Planning() {
     moment().isoWeekday(5+cWeek).format("ddd DD MMM"),
   ];
 
+  let today = moment().format("ddd DD MMM");
+  console.log(today);
+
   const nextWeek = () =>{
     setCWeek(cWeek + 7);
+  }
+
+  const precWeek = () =>{
+    setCWeek(cWeek - 7);
   }
 
   const handleConsRef = () => {
@@ -43,14 +55,37 @@ function Planning() {
 
   const handleEvenExt = () =>{
 
-    if (showEvenExt === true) {setShowEvenExt(false)}
-    else {setShowEvenExt(true)}
+    if (showEvenExt === true) {
+      setShowEvenExt(false);
+      setShowEvenExtBut("Afficher evenement EXT");
+    }
+    else {
+      setShowEvenExt(true);
+      setShowEvenExtBut("Afficher evenement INT")
+    }
   }
+
+  useEffect(() => {
+
+    Axios.get('http://localhost:3001/read').then((response) => {
+      setEventList(response.data);
+    })
+
+  });
+
+  useEffect(() => {
+    if(eventList){
+    eventList.map((l)=>{
+      console.log(moment(l.eventDate, "DD-MM-YYYY").format("ddd DD MMM"));
+    });
+  }
+  },[eventList]);
 
 
   return (
     <div className="App">
-      <h2 onClick={nextWeek}>NEXT</h2>
+      <button onClick={precWeek}>PREC</button>
+      <button onClick={nextWeek}>NEXT</button>
       <button onClick={handleConsRef}>{showConsRefBut}</button>
       <button onClick={handleEvenExt}>{showEvenExtBut}</button>
 
@@ -60,43 +95,43 @@ function Planning() {
         weekDays.map((wD) => {
     return (
     <tr>
-      
-      <td className="daysWeek">{wD}</td>
 
-      {showEvenExt ? 
+      {today == wD ? <td className="daysWeek">{wD} aujd.</td> : <td className="daysWeek">{wD}</td>}
       
-      listEventsMatin.map((list) => {
-        return (list.event_day === wD && list.event_ext === true &&
+      {showEvenExt && eventList ? 
+      
+      eventList.map((list) => {
+        return (moment(list.eventDate, "DD-MM-YYYY").format("ddd DD MMM") === wD && list.eventExt === true && list.eventMom === "Matin" &&
           <td className="eventsMatin">
-          <p className="eventName">{list.event_name}</p>
-          {list.event_descrip !== "" && <p className="eventDescrip">{list.event_descrip}</p>}
-          <p className="eventHour">{list.event_hours}</p>
-          <p className="eventPlace">{list.event_place}</p>
-          {list.event_adress ? <p className="eventAddr">{list.event_adress}</p> : ""}
-          {showConsRef ? <p className="consref">{list.event_consref}</p> : "" }
+          <p className="eventName">{list.eventName}</p>
+          {list.eventDescr !== "" && <p className="eventDescrip">{list.eventDescr}</p>}
+          <p className="eventHour">{list.eventHour}</p>
+          <p className="eventPlace">{list.eventPlace}</p>
+          {list.eventAddr ? <p className="eventAddr">{list.eventAddr}</p> : ""}
+          {showConsRef ? <p className="consref">{list.eventCons}</p> : "" }
         </td>
         );
       })
       
       :
       
-      listEventsMatin.map((list) => {
-        return (list.event_day === wD && list.event_ext === false &&
+      eventList.map((list) => {
+        return (moment(list.eventDate, "DD-MM-YYYY").format("ddd DD MMM") === wD && list.eventExt === false && list.eventMom === "Matin" &&
           <td className="eventsMatin">
-            {list.event_theme === "emploi" && <h4 className="eventTheme emploi">{list.event_theme}</h4>}
-            {list.event_theme === "mobilité" && <h4 className="eventTheme mobilite">{list.event_theme}</h4>}
-            {list.event_theme === "citoyenneté" && <h4 className="eventTheme citoy">{list.event_theme}</h4>}
-            {list.event_theme === "logement" && <h4 className="eventTheme logement">{list.event_theme}</h4>}
-            {list.event_theme === "santé" && <h4 className="eventTheme sante">{list.event_theme}</h4>}
-            {list.event_theme === "sport" && <h4 className="eventTheme sport">{list.event_theme}</h4>}
-            {list.event_theme === "culture" && <h4 className="eventTheme culture">{list.event_theme}</h4>}
-            {list.event_theme === "infos" && <h4 className="eventTheme infos">{list.event_theme}</h4>}
-          <p className="eventName">{list.event_name}</p>
-          {list.event_descrip !== "" && <p className="eventDescrip">{list.event_descrip}</p>}
-          <p className="eventHour">{list.event_hours}</p>
-          <p className="eventPlace">{list.event_place}</p>
-          {list.event_adress ? <p className="eventAddr">{list.event_adress}</p> : ""}
-          {showConsRef ? <p className="consref">{list.event_consref}</p> : "" }
+            {list.eventTheme === "emploi" && <h4 className="eventTheme emploi">{list.eventTheme}</h4>}
+            {list.eventTheme === "mobilité" && <h4 className="eventTheme mobilite">{list.eventTheme}</h4>}
+            {list.eventTheme === "citoyenneté" && <h4 className="eventTheme citoy">{list.eventTheme}</h4>}
+            {list.eventTheme === "logement" && <h4 className="eventTheme logement">{list.eventTheme}</h4>}
+            {list.eventTheme === "santé" && <h4 className="eventTheme sante">{list.eventTheme}</h4>}
+            {list.eventTheme === "sport" && <h4 className="eventTheme sport">{list.eventTheme}</h4>}
+            {list.eventTheme === "culture" && <h4 className="eventTheme culture">{list.eventTheme}</h4>}
+            {list.eventTheme === "infos" && <h4 className="eventTheme infos">{list.eventTheme}</h4>}
+          <p className="eventName">{list.eventName}</p>
+          {list.eventDescr !== "" && <p className="eventDescrip">{list.eventDescr}</p>}
+          <p className="eventHour">{list.eventHour}</p>
+          <p className="eventPlace">{list.eventPlace}</p>
+          {list.eventAddr ? <p className="eventAddr">{list.eventAddr}</p> : ""}
+          {showConsRef ? <p className="consref">{list.eventCons}</p> : "" }
         </td>
         );
       })
@@ -104,38 +139,38 @@ function Planning() {
 
 {showEvenExt ? 
       
-      listEventsAprem.map((list) => {
-        return (list.event_day === wD && list.event_ext === true &&
+      eventList.map((list) => {
+        return (moment(list.eventDate, "DD-MM-YYYY").format("ddd DD MMM") === wD && list.eventExt === true && list.eventMom === "Aprem" &&
           <td className="eventsAprem"> 
-          <p className="eventName">{list.event_name}</p>
-          {list.event_descrip !== "" && <p className="eventDescrip">{list.event_descrip}</p>}
-          <p className="eventHour">{list.event_hours}</p>
-          <p className="eventPlace">{list.event_place}</p>
-          {list.event_adress ? <p className="eventAddr">{list.event_adress}</p> : ""}
-          {showConsRef ? <p className="consref">{list.event_consref}</p> : "" }
+          <p className="eventName">{list.eventName}</p>
+          {list.event_descrip !== "" && <p className="eventDescrip">{list.eventDescr}</p>}
+          <p className="eventHour">{list.eventHour}</p>
+          <p className="eventPlace">{list.eventPlace}</p>
+          {list.event_adress ? <p className="eventAddr">{list.eventAddr}</p> : ""}
+          {showConsRef ? <p className="consref">{list.eventCons}</p> : "" }
         </td>
         );
       }) 
       
       :
       
-      listEventsAprem.map((list) => {
-        return (list.event_day === wD && list.event_ext === false &&
+      eventList.map((list) => {
+        return (moment(list.eventDate, "DD-MM-YYYY").format("ddd DD MMM") === wD && list.eventExt === true && list.eventMom === "Aprem" &&
           <td className="eventsAprem"> 
-          {list.event_theme === "emploi" && <h4 className="eventTheme emploi">{list.event_theme}</h4>}
-          {list.event_theme === "mobilité" && <h4 className="eventTheme mobilite">{list.event_theme}</h4>}
-          {list.event_theme === "citoyenneté" && <h4 className="eventTheme citoy">{list.event_theme}</h4>}
-          {list.event_theme === "logement" && <h4 className="eventTheme logement">{list.event_theme}</h4>}
-          {list.event_theme === "santé" && <h4 className="eventTheme sante">{list.event_theme}</h4>}
-          {list.event_theme === "sport" && <h4 className="eventTheme sport">{list.event_theme}</h4>}
-          {list.event_theme === "culture" && <h4 className="eventTheme culture">{list.event_theme}</h4>}
-          {list.event_theme === "infos" && <h4 className="eventTheme infos">{list.event_theme}</h4>}
-          <p className="eventName">{list.event_name}</p>
-          {list.event_descrip !== "" && <p className="eventDescrip">{list.event_descrip}</p>}
-          <p className="eventHour">{list.event_hours}</p>
-          <p className="eventPlace">{list.event_place}</p>
-          {list.event_adress ? <p className="eventAddr">{list.event_adress}</p> : ""}
-          {showConsRef ? <p className="consref">{list.event_consref}</p> : "" }
+          {list.eventTheme === "emploi" && <h4 className="eventTheme emploi">{list.eventTheme}</h4>}
+          {list.eventTheme === "mobilité" && <h4 className="eventTheme mobilite">{list.eventTheme}</h4>}
+          {list.eventTheme === "citoyenneté" && <h4 className="eventTheme citoy">{list.eventTheme}</h4>}
+          {list.eventTheme === "logement" && <h4 className="eventTheme logement">{list.eventTheme}</h4>}
+          {list.eventTheme === "santé" && <h4 className="eventTheme sante">{list.eventTheme}</h4>}
+          {list.eventTheme === "sport" && <h4 className="eventTheme sport">{list.eventTheme}</h4>}
+          {list.eventTheme === "culture" && <h4 className="eventTheme culture">{list.eventTheme}</h4>}
+          {list.eventTheme === "infos" && <h4 className="eventTheme infos">{list.eventTheme}</h4>}
+          <p className="eventName">{list.eventName}</p>
+          {list.event_descrip !== "" && <p className="eventDescrip">{list.eventDescr}</p>}
+          <p className="eventHour">{list.eventHour}</p>
+          <p className="eventPlace">{list.eventPlace}</p>
+          {list.event_adress ? <p className="eventAddr">{list.eventAddr}</p> : ""}
+          {showConsRef ? <p className="consref">{list.eventCons}</p> : "" }
         </td>
         );
       })

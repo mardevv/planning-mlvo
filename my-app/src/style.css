@@ -24,7 +24,7 @@ body {
 }
 
 .daysWeek {
-    height: 80px;
+    height: 120px;
     width: 110px;
     text-align: center;
     font-weight: bold;
@@ -91,7 +91,7 @@ body {
 }
 
 table {
-    border-spacing: 10px 2rem;
+    border-spacing: 10px 1rem;
 }
 
 .table-bordered td,
