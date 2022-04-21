@@ -4,6 +4,11 @@ import Axios from "axios";
 import 'moment/locale/fr'
 import {useState, useEffect} from 'react';
 import './style.css';
+import Button from 'react-bootstrap/Button';
+
+import nextbtn from './img/next-btn.png';
+import precbtn from './img/prec-btn.png';
+import logo from './img/mlvo-logo.png';
 
 
 function Planning() {
@@ -13,7 +18,7 @@ function Planning() {
   const [showConsRefBut, setShowConsRefBut] = useState("Afficher Conseillers");
 
   const [showEvenExt, setShowEvenExt] = useState(false);
-  const [showEvenExtBut, setShowEvenExtBut] = useState("Afficher Evenements EXT");
+  const [showEvenExtBut, setShowEvenExtBut] = useState("Afficher Evenements EXTERNES");
 
   const [eventList, setEventList] = useState([]);
 
@@ -27,6 +32,7 @@ function Planning() {
     moment().isoWeekday(3+cWeek).format("ddd DD MMM"),
     moment().isoWeekday(4+cWeek).format("ddd DD MMM"),
     moment().isoWeekday(5+cWeek).format("ddd DD MMM"),
+    moment().isoWeekday(6+cWeek).format("ddd DD MMM"),
   ];
 
   let today = moment().format("ddd DD MMM");
@@ -57,11 +63,11 @@ function Planning() {
 
     if (showEvenExt === true) {
       setShowEvenExt(false);
-      setShowEvenExtBut("Afficher evenement EXT");
+      setShowEvenExtBut("Afficher Evenement EXTERNES");
     }
     else {
       setShowEvenExt(true);
-      setShowEvenExtBut("Afficher evenement INT")
+      setShowEvenExtBut("Afficher Evenement INTERNES")
     }
   }
 
@@ -84,10 +90,17 @@ function Planning() {
 
   return (
     <div className="App">
-      <button onClick={precWeek}>PREC</button>
-      <button onClick={nextWeek}>NEXT</button>
-      <button onClick={handleConsRef}>{showConsRefBut}</button>
-      <button onClick={handleEvenExt}>{showEvenExtBut}</button>
+
+
+
+    <div id="buttonsCont">
+      <img className="buttons" onClick={precWeek} src={precbtn}/>
+      <Button className="buttonstxt" variant="outline-success" onClick={handleConsRef}>{showConsRefBut}</Button>
+      <button className="buttonstxt" onClick={handleEvenExt}>{showEvenExtBut}</button>
+      <img className="buttons" onClick={nextWeek} src={nextbtn}/>
+    </div>
+
+    <div id="backtable">
 
       <table className="table table-bordered text-center">
         <tbody>
@@ -96,7 +109,7 @@ function Planning() {
     return (
     <tr>
 
-      {today == wD ? <td className="daysWeek">{wD} aujd.</td> : <td className="daysWeek">{wD}</td>}
+      {today == wD ? <td className="today">{wD}</td> : <td className="daysWeek">{wD}</td>}
       
       {showEvenExt && eventList ? 
       
@@ -183,6 +196,10 @@ function Planning() {
       </table>
 
       
+    </div>
+    <div id="footer">
+      <p className="footertxt">{"Made with <3 by MAKIL Marouan for   "}   <img id="footerlogo" src={logo}></img> </p>
+    </div>
     </div>
   );
 }
