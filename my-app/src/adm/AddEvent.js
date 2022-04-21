@@ -117,7 +117,7 @@ function AddEvent() {
         };
 
         try{
-            Axios.post('http://localhost:3001/post', newEvent)
+            Axios.post('https://mlvo-planning.herokuapp.com/post', newEvent)
             .then(response => setIdEvent(response.data.id));
             setReqStatus("Evènement ajouté .");
 

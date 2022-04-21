@@ -19,7 +19,7 @@ function DelEvent() {
         e.preventDefault();
 
         if(dateSelected){
-            Axios.get(`http://localhost:3001/getbydate/${dateSelected}`).then((response) => {
+            Axios.get(`https://mlvo-planning.herokuapp.com/getbydate/${dateSelected}`).then((response) => {
                 setEventsAtDate(response.data);
               })
         }
@@ -27,7 +27,7 @@ function DelEvent() {
 
 
     const onDelete = (id) => {
-        Axios.delete(`http://localhost:3001/delevent/${id}`).then((response) => {console.log("deleted" , response)})
+        Axios.delete(`https://mlvo-planning.herokuapp.com/delevent/${id}`).then((response) => {console.log("deleted" , response)})
 
         var filteredArray = eventsAtDate.filter(function(e) { return e !== eventsAtDate.find(el => el._id === id) });
         setEventsAtDate(filteredArray);

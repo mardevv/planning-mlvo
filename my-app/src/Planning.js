@@ -67,7 +67,7 @@ function Planning() {
 
   useEffect(() => {
 
-    Axios.get('http://localhost:3001/read').then((response) => {
+    Axios.get('https://mlvo-planning.herokuapp.com/read').then((response) => {
       setEventList(response.data);
     })
 
