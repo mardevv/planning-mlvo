@@ -74,7 +74,7 @@ function AddEvent() {
             setEventMom("Matin");
         }
         else if (e.target.value === "apr"){
-            setEventExt("Aprem");
+            setEventMom("Aprem");
         }
     }
 
@@ -115,6 +115,8 @@ function AddEvent() {
             eventCons: eventCons,
             eventMom: eventMom
         };
+
+        console.log(newEvent);
 
         try{
             Axios.post('https://mlvo-planning.herokuapp.com/post', newEvent)
@@ -170,7 +172,7 @@ function AddEvent() {
 
             <div class="event-name">
                 <label>Nom évènement : </label>
-                <input type="text" maxlength="17" value={eventName} onChange={onChangeName} required/>
+                <input type="text" value={eventName} onChange={onChangeName} required/>
             </div>
 
             <div class="event-date">
@@ -204,7 +206,6 @@ function AddEvent() {
                         type="text" 
                         value={eventDescr}
                         onChange={onChangeDescr}
-                        maxlength="20"
                 />
             </div>
 
@@ -214,7 +215,6 @@ function AddEvent() {
                         type="text" 
                         value={eventPlace}
                         onChange={onChangePlace}
-                        maxlength="12"
                         required
                 />
             </div>
@@ -225,7 +225,6 @@ function AddEvent() {
                         type="text" 
                         value={eventAddr}
                         onChange={onChangeAddr}
-                        maxlength="18"
                 />
             </div>
 
@@ -235,7 +234,6 @@ function AddEvent() {
                         type="text" 
                         value={eventCons}
                         onChange={onChangeCons}
-                        maxlength="18"
                         required
                 />
             </div>

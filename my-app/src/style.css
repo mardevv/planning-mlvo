@@ -10,10 +10,6 @@ html{
     margin : auto;
 }
 
-.buttons:hover{
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
-
 .buttonstxt{
     height: 45px;
     margin : auto;
@@ -21,13 +17,6 @@ html{
     background-color: white;
     color: black;
     border: 2px solid #4c8baf; /* Green */
-}
-
-.buttonstxt:hover{
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-    background-color: #4c8baf; /* Green */
-    color: white;
-
 }
 
 #footerlogo{
@@ -55,10 +44,6 @@ html{
     text-transform: uppercase;
     border-radius: 10px;
     color: white;
-}
-
-.today:hover {
-    background-color: rgb(188, 71, 71);
 }
 
 #footer{
@@ -94,10 +79,6 @@ html{
     width: 150px;
 }
 
-.eventsMatin:hover,
-.eventsAprem:hover {
-    box-shadow: 2px 2px 5px black;
-}
 
 .daysWeek {
     height: 120px;
@@ -111,9 +92,7 @@ html{
     color: white;
 }
 
-.daysWeek:hover {
-    background-color: rgb(71, 155, 188);
-}
+
 
 .table {
     margin-top: 15px;
@@ -207,4 +186,80 @@ table {
 
 .citoy {
     background-color: orangered;
+}
+
+.table-responsive{
+    display: none;
+}
+
+#buttonsContReponsive{
+    display: none;
+}
+
+
+@media only screen and (min-width: 1024px) {
+
+    .buttons:hover{
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    }
+
+    .buttonstxt:hover{
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        background-color: #4c8baf; /* Green */
+        color: white;
+    
+    }
+
+    .today:hover {
+        background-color: rgb(188, 71, 71);
+    }
+
+    .eventsMatin:hover,
+    .eventsAprem:hover {
+    box-shadow: 2px 2px 5px black;
+}
+
+.daysWeek:hover {
+    background-color: rgb(71, 155, 188);
+}
+
+
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+    #backtable{
+        display: none;
+    }
+
+    #buttonsContReponsive{
+        display: flex;
+        margin: auto;
+    }
+
+    .table-responsive{
+        display: revert;
+        margin: auto;
+        width: 70%;
+    }
+
+     #buttonsCont{
+        display: none;
+    }
+
+    .day{
+        height: 50px;
+        width: 110px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        background-color: rgb(87, 155, 227);
+        text-transform: uppercase;
+        border-radius: 50px;
+        color: white;
+    }
+
+
+
 }
